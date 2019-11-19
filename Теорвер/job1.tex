@@ -89,5 +89,28 @@ $$\delta\approx13\cdot10^{-6}$$
 $$ 0.05\cdot P(A_1)+0.1\cdot P(A_2)+0.5\cdot (1-P(A_1)-P(A_2))=$$
 $$0.05\frac{e^{-1}}{1!}+0.1\frac{e^{-1}}{2!}+0.5\left[1-e^{-1}\left(\frac{1}{1!}+\frac{1}{2!}\right)\right]\approx 0.26$$
 
+
+\newpage
+\item Задание 6. Дана плотность вероятности $f(x)$ случайной величины $X$:
+\begin{equation}
+f(x) =
+	\begin{cases}
+	0, & x < 0 \\
+	Cxe^{-x},  & x \ge 0
+	\end{cases}
+\end{equation}
+Найти: $C, F(x), m_X, D_X, \sigma _X, P(X>m_X), Me.$ Построить графики $f(x), F(x)$
+
+\begin{enumerate}[label=\arabic*)]
+\item Воспользуемся условием нормировки плотности вероятности: $\int_{-\infty}^{\infty} f(x)dx = 1$.
+
+Тогда по условию $C\int_{0}^{\infty}xe^{-x}dx=1\Leftrightarrow
+C  \left[x \frac{e^{-x}}{-1}\Bigr|_{0}^{\infty} -\int\displaylimits_{0}^{\infty}\frac{e^{-x}} {-1}dx\right] =1\Leftrightarrow
+C \cdot 1 = 1 \Leftrightarrow C = 1$
+
+\item
+$F(x)=\int\displaylimits_{-\infty}^{x}f(t)dt$
+\end{enumerate}
+
 \end{enumerate}
 \end{document}
