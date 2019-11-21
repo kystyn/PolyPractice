@@ -147,7 +147,7 @@ $(x_{i} - x_{j})^{2} + (y_{i} - y_{j})^{2} \ge (r_{i} - r_{j})^{2}, i, j = \over
 $%\begin{equation}
 \begin{cases}
 	x_{i} - r_{i} \ge 0 \\
-	y_{i} - r_{i} \le W,	& i = \overline{1, n} \\
+	y_{i} - r_{i} \le 0,	& i = \overline{1, n} \\
 	y_{i} + r_{i} \le W
 \end{cases}
 $%\end{equation}
@@ -155,7 +155,7 @@ $%\end{equation}
 
 Здесь ${(x_{i}, y_{i}),   i = \overline{1, n}}$ - координаты центров деталей
 
-Необходимо разместить детали на полосе так, чтобы занимаемая часть полосы была минимальна, т. е. ${\max_{i}(x_{i} + y_{i})\rightarrow \min}$
+Необходимо разместить детали на полосе так, чтобы занимаемая часть полосы была минимальна, т. е. ${\max\limits_{i = \overline{1, n}}(x_{i} + r_{i})\xrightarrow[{(x_i, y_i)}]{} \min}$
 \printbibliography
 
 \end{document}
