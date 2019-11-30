@@ -8,16 +8,21 @@
 class Brake
 {
 public:
+    Brake() {}
     Brake( std::string const &fileName );
     double getVelocityByLever( int pos ) const;
-    double getForceByVelocity( double pos ) const;
-    double getForceByLever( int pos ) const;
+    double getForceByBreakPressure( double pressure ) const;
+    double getForceByLever( int leverPos,
+                            double prevPressure,
+                            int elapsedFromBrakeStart,
+                            int wagonNo ) const;
 
 private:
+    double brakeWavePeriod;
     MapTable<int, double>
         breakVelocityByLever;
     MapTable<double, double>
-        forceByBreakVelocity;
+        forceByBrakePressure;
 };
 
 #endif /* __BRAKE_H_ */

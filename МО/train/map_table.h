@@ -17,18 +17,18 @@ public:
         init(fileName);
     }
 
-    MapTable( std::ifstream &ifs, int count )
+    MapTable( std::ifstream &ifs, int count = 0 )
     {
         init(ifs, count);
     }
 
-    void init( std::ifstream &ifs, int count )
+    void init( std::ifstream &ifs, int count = 0 )
     {
         KeyT key;
         ValT val;
         int i = 0;
 
-        while (i < count)
+        while (count != 0 ? i < count : !ifs)
         {
             ifs >> key;
             if (!ifs)
