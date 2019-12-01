@@ -27,11 +27,10 @@ void Train::init( const std::string &fileName )
     }
 
     // TRAIN:
-    // couplerForceMax
-    // tractionForceMax
-    // brakeWavePeriod
-    // wagonLength
-    // wagonsMassTable
+    // couplerForceMax, kN
+    // tractionForceMax, kN
+    // wagonLength, m
+    // wagonsMassTable, tonn
 
     ifs >> theStaticInfo;
 

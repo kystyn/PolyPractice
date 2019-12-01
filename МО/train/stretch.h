@@ -15,10 +15,10 @@ public:
 
     // ATTENTION
     // remember that last sector is sector of new stretch
-    // it is mentioned just for out velocity check
+    // it is mentioned just for outcoming velocity check
     // don't consider other conditions
 
-    Stretch() {}
+    Stretch() = default;
 
     Stretch( std::string const &fileName );
 
@@ -30,7 +30,6 @@ public:
     std::vector<Sector> const & profile( void ) const;
 
 private:
-
     std::vector<Sector> theProfile;
 };
 

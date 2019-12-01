@@ -25,15 +25,22 @@ OptControlProblem::OptControlProblem( const std::string &brakeFName,
 
 void OptControlProblem::evaluateForces( double distance )
 {
+    static const double gravityConst = 9.81;
     auto trainInfo = train.staticInfo();
     auto wagonMass = train.wagonMass();
 
     for (int i = 0; i < trainInfo.wagonCount; i++)
     {
         auto curMass = wagonMass[size_t(i)];
-        train.setForce(i, curState.tractionPercent * trainInfo.tractionForceMax -
-            mu * curMass * cos(stretch.sector(distance - trainInfo.wagonLength * i).angle) -
-            brake.forceByLever(curState.brakeLever, curState.time, i));
+        auto curAngle = stretch.sector(distance - trainInfo.wagonLength * i).angle;
+        auto
+                tractionForce = curState.tractionPercent * trainInfo.tractionForceMax, //kN
+                frictionForce = - mu * curMass * cos(curAngle), // kN = tonn * m/s^2
+                brakeForce = brake.forceByLever(curState.brakeLever, curState.time, i),
+                gravityForce = - curMass * gravityConst * sin(curAngle);
+
+
+        train.setForce(i, tractionForce + frictionForce + brakeForce + gravityForce);
     }
 }
 
@@ -71,7 +78,7 @@ bool OptControlProblem::simulateSector(
         distance = evaluateDistance(distance, velocity, step);
 
         // brake
-        auto brakeVel = brake.velocityByLever(sectorSolution.brake[size_t(stepNo)]);
+        auto brakeVel = brake.brakeVelocityByLever(sectorSolution.brake[size_t(stepNo)]);
         deltaPressure += brakeVel * step;
 
         if (!checkForces())

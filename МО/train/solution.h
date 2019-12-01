@@ -7,8 +7,6 @@
 class Solution
 {
 public:
-    Solution();
-
     void setTimeUniformDistribution( int h, int N );
     void output( std::string const &fileName );
 

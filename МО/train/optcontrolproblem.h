@@ -18,18 +18,18 @@ public:
                        std::string const & stretchFName,
                        int humidity);
 
-    // distance from the stretch beginning
-    void evaluateForces( double distance );
-    double evaluateVelocity( double prevVelocity, int timeElapsed ) const;
-    double evaluateDistance( double prevDistance, double velocity, int timeElapsed ) const;
     bool simulateSector(
             double incomingVelocity,
             int sectorNo,
             Solution const &sectorSolution );
 
+private:
+    // distance from the stretch beginning
+    void evaluateForces( double distance );
+    double evaluateVelocity( double prevVelocity, int timeElapsed ) const;
+    double evaluateDistance( double prevDistance, double velocity, int timeElapsed ) const;
     bool checkForces( void ) const;
 
-private:
     struct DynamicState
     {
         std::vector<double>
@@ -39,6 +39,7 @@ private:
 
     struct ControlState
     {
+        // time in secs
         int
             tractionPercent,
             brakeLever,

@@ -4,11 +4,6 @@
 
 #include "solution.h"
 
-Solution::Solution()
-{
-
-}
-
 void Solution::setTimeUniformDistribution( int h, int N )
 {
     step = h;

@@ -10,7 +10,7 @@ class Brake
 public:
     Brake() {}
     Brake( std::string const &fileName );
-    double velocityByLever( int pos ) const;
+    double brakeVelocityByLever( int pos ) const;
     double forceByBrakePressure( double pressure ) const;
     double forceByLever( int leverPos,
                          int curTime,

@@ -56,6 +56,8 @@ double Stretch::distanceFromStart( int sectorNo ) const
     double dist = 0;
     for (size_t i = 0; i < size_t(sectorNo); i++)
         dist += theProfile[i].length;
+
+    return dist;
 }
 
 const std::vector<Stretch::Sector> & Stretch::profile() const

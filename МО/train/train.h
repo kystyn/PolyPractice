@@ -9,10 +9,10 @@ class Train
 public:
     struct StaticInfo
     {
-        double couplerForceMax;
-        double tractionForceMax;
+        double couplerForceMax; // kN
+        double tractionForceMax; // kN
         int wagonCount;
-        int wagonLength;
+        double wagonLength; // m
     };
 
     Train( void ) {}
