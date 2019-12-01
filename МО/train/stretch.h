@@ -13,6 +13,11 @@ public:
         double length;
     };
 
+    // ATTENTION
+    // remember that last sector is sector of new stretch
+    // it is mentioned just for out velocity check
+    // don't consider other conditions
+
     Stretch() {}
 
     Stretch( std::string const &fileName );
