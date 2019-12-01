@@ -20,23 +20,42 @@ public:
 
     // distance from the stretch beginning
     void evaluateForces( double distance );
+    double evaluateVelocity( double prevVelocity, int timeElapsed ) const;
+    double evaluateDistance( double prevDistance, double velocity, int timeElapsed ) const;
+    bool simulateSector(
+            double incomingVelocity,
+            int sectorNo,
+            Solution const &sectorSolution );
+
+    bool checkForces( void ) const;
 
 private:
+    struct DynamicState
+    {
+        std::vector<double>
+            &force;
+        double velocity;
+    };
+
+    struct ControlState
+    {
+        int
+            tractionPercent,
+            brakeLever,
+            time;
+    };
+
     Brake brake;
     Train train;
     Stretch stretch;
     Weather weather;
-    Solution solution;
+    Solution stretchSolution;
 
     double mu;
 
-    int
-        curTraction,
-        curBrakeLever;
-    bool isBrakeWaveDistributing;
-
-    int brakeStartedTime;
-    int currentTime;
+    ControlState
+        curState,
+        prevState;
 };
 
 #endif // OPTCONTROLPROBLEM_H

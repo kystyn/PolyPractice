@@ -10,19 +10,26 @@ class Brake
 public:
     Brake() {}
     Brake( std::string const &fileName );
-    double getVelocityByLever( int pos ) const;
-    double getForceByBreakPressure( double pressure ) const;
-    double getForceByLever( int leverPos,
-                            double prevPressure,
-                            int elapsedFromBrakeStart,
-                            int wagonNo ) const;
+    double velocityByLever( int pos ) const;
+    double forceByBrakePressure( double pressure ) const;
+    double forceByLever( int leverPos,
+                         int curTime,
+                         int wagonNo );
 
+    static const int NEUTRAL_LEVER = 2;
+    static const double NEUTRAL_PRESSURE;
 private:
+    int prevLeverPos;
+    // stable == in neutral position
+    double prevStablePressure;
+
+    int brakeStartTime;
     double brakeWavePeriod;
+
     MapTable<int, double>
-        breakVelocityByLever;
+        theBrakeVelocityByLever;
     MapTable<double, double>
-        forceByBrakePressure;
+        theForceByBrakePressure;
 };
 
 #endif /* __BRAKE_H_ */

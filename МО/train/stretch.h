@@ -20,11 +20,13 @@ public:
     void init( std::string const &fileName );
 
     // distance is distance from the beginning of the stretch
-    Sector const & getSector( double distance ) const;
+    Sector const & sector( double distance ) const;
+    double distanceFromStart( int sectorNo ) const;
+    std::vector<Sector> const & profile( void ) const;
 
 private:
 
-    std::vector<Sector> profile;
+    std::vector<Sector> theProfile;
 };
 
 #endif // STRETCH_H

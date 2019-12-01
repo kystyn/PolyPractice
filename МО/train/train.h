@@ -19,22 +19,24 @@ public:
 
     Train( std::string const &fileName );
 
-    void setActualForce( int wagonNo, double force );
-    double getActualForce( int wagonNo ) const;
+    void setForce( int wagonNo, double force );
 
     void init( std::string const &fileName );
 
     StaticInfo const & staticInfo( void ) const;
 
+    std::vector<int> const & wagonMass( void ) const;
+    std::vector<double> const & wagonForce( void ) const;
+
+    int wagonMass( int wagonNo ) const;
+    double wagonForce( int wagonNo ) const;
+
+    int trainLength( void ) const;
+
 private:
-//    double couplerForceMax;
-//    double tractionForceMax;
-//    int wagonCount;
-//    int wagonLength;
-//    double brakeWavePeriod;
     StaticInfo theStaticInfo;
-    std::vector<int> wagonMass;
-    std::vector<double> wagonForce;
+    std::vector<int> theWagonMass;
+    std::vector<double> theWagonForce;
 };
 
 #endif // TRAIN_H

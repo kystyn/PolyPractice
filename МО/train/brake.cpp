@@ -1,6 +1,9 @@
 #include "brake.h"
 
-Brake::Brake(const std::string &fileName)
+const double Brake::NEUTRAL_PRESSURE = 4.5;
+
+Brake::Brake( const std::string &fileName ) :
+    prevLeverPos(NEUTRAL_LEVER)
 {
     std::ifstream ifs(fileName);
     if (!ifs)
@@ -12,17 +15,17 @@ Brake::Brake(const std::string &fileName)
 
     int posCount;
     ifs >> posCount;
-    breakVelocityByLever.init(ifs, posCount);
+    theBrakeVelocityByLever.init(ifs, posCount);
 }
 
-double Brake::getVelocityByLever(int pos) const
+double Brake::velocityByLever( int pos ) const
 {
-    return breakVelocityByLever.get(pos);
+    return theBrakeVelocityByLever.get(pos);
 }
 
-double Brake::getForceByBreakPressure( double pressure ) const
+double Brake::forceByBrakePressure( double pressure ) const
 {
-    auto table = forceByBrakePressure.getTable();
+    auto table = theBrakeVelocityByLever.getTable();
     std::pair<double, double> prev, next = {0, 0};
 
     for (auto t : table)
@@ -44,14 +47,25 @@ double Brake::getForceByBreakPressure( double pressure ) const
     return (1 - l) * prev.second + l * prev.second;
 }
 
-double Brake::getForceByLever( int leverPos,
-              double prevPressure,
-              int elapsedFromBrakeStart,
-              int wagonNo ) const
+double Brake::forceByLever( int leverPos, int curTime, int wagonNo )
 {
-    return getForceByBreakPressure(
-                prevPressure +
-                ((elapsedFromBrakeStart - wagonNo * brakeWavePeriod) > 0) *
-                getVelocityByLever(leverPos) *
-                (elapsedFromBrakeStart - wagonNo * brakeWavePeriod));
+    auto curPressure = prevStablePressure +
+            ((curTime - brakeStartTime - wagonNo * brakeWavePeriod) > 0) *
+            velocityByLever(leverPos) *
+            (curTime - brakeStartTime - wagonNo * brakeWavePeriod);
+
+    if (leverPos != NEUTRAL_LEVER && prevLeverPos == NEUTRAL_LEVER)
+    {
+        brakeStartTime = curTime;
+        prevStablePressure = curPressure;
+    }
+
+    if (leverPos == NEUTRAL_LEVER && prevLeverPos != NEUTRAL_LEVER)
+    {
+        prevStablePressure = curPressure;
+    }
+
+    prevLeverPos = leverPos;
+
+    return forceByBrakePressure(curPressure);
 }

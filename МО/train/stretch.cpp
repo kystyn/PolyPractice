@@ -36,17 +36,29 @@ void Stretch::init( const std::string &fileName )
         ifs >> s;
         if (std::abs(s.maxVelocity) < 1e-6)
             return;
-        profile.push_back(s);
+        theProfile.push_back(s);
     }
 }
 
-const Stretch::Sector & Stretch::getSector( double distance ) const
+const Stretch::Sector & Stretch::sector( double distance ) const
 {
     double d = 0;
 
-    for (auto const &s : profile)
+    for (auto const &s : theProfile)
         if (d + s.length > distance)
             return s;
 
-    return profile.back();
+    return theProfile.back();
+}
+
+double Stretch::distanceFromStart( int sectorNo ) const
+{
+    double dist = 0;
+    for (size_t i = 0; i < size_t(sectorNo); i++)
+        dist += theProfile[i].length;
+}
+
+const std::vector<Stretch::Sector> & Stretch::profile() const
+{
+    return theProfile;
 }
