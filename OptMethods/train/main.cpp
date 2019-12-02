@@ -11,6 +11,7 @@ int main( void )
                         "../train/dat/weather.dat",
                         "../train/dat/stretch.dat",
                         50);
+
     cout << "Hello World!" << endl;
     return 0;
 }

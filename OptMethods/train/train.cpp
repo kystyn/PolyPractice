@@ -38,13 +38,13 @@ void Train::init( const std::string &fileName )
     MapTable<int, int> massDistr(ifs);
 
     std::map<int, int> table = massDistr.getTable();
-    theStaticInfo.wagonCount = int(table.size());
 
-    table[theStaticInfo.wagonCount + 1] = 0;
+    theStaticInfo.wagonCount = (--table.end())->first;
 
     auto end = --table.end();
 
     theWagonMass.clear();
+    theWagonMass.resize(size_t(end->first));
 
     int curWagon = 0;
     for (auto i = table.begin(); i != end;)
@@ -55,6 +55,7 @@ void Train::init( const std::string &fileName )
         for (int j = 0; j < next->first - cur->first; j++)
             theWagonMass[size_t(curWagon++)] = cur->second;
     }
+    theWagonMass.back() = theWagonMass[theWagonMass.size() - 2];
 }
 
 const Train::StaticInfo & Train::staticInfo() const
