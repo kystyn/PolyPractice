@@ -11,7 +11,7 @@ public:
     Brake() {}
     Brake( std::string const &fileName );
     double brakeVelocityByLever( int pos ) const;
-    double forceByBrakePressure( double pressure ) const;
+    double forceByBrakeVelocity( double pressure ) const;
     double forceByLever( int leverPos,
                          int curTime,
                          int wagonNo );
@@ -29,7 +29,7 @@ private:
     MapTable<int, double>
         theBrakeVelocityByLever;
     MapTable<double, double>
-        theForceByBrakePressure;
+        theForceByBrakeVelocity;
 };
 
 #endif /* __BRAKE_H_ */

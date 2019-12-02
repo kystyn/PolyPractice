@@ -28,7 +28,7 @@ public:
         ValT val;
         int i = 0;
 
-        while (count != 0 ? i < count : !ifs)
+        while ((count != 0) ? (i < count) : ((bool)ifs))
         {
             ifs >> key;
             if (!ifs)

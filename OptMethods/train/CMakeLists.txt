@@ -10,4 +10,3 @@ add_executable(train main.cpp weather.h brake.h tools.h
     optcontrolproblem.cpp optcontrolproblem.h
     solution.cpp solution.h
     solutiongenerator.cpp solutiongenerator.h)
-

@@ -16,7 +16,7 @@ Brake::Brake( const std::string &fileName ) :
     int posCount;
     ifs >> posCount;
     theBrakeVelocityByLever.init(ifs, posCount);
-    theForceByBrakePressure.init(ifs);
+    theForceByBrakeVelocity.init(ifs);
 }
 
 double Brake::brakeVelocityByLever( int pos ) const
@@ -24,9 +24,9 @@ double Brake::brakeVelocityByLever( int pos ) const
     return theBrakeVelocityByLever.get(pos);
 }
 
-double Brake::forceByBrakePressure( double pressure ) const
+double Brake::forceByBrakeVelocity( double pressure ) const
 {
-    return theForceByBrakePressure.get(pressure);
+    return theForceByBrakeVelocity.get(pressure);
 }
 
 double Brake::forceByLever( int leverPos, int curTime, int wagonNo )
@@ -49,5 +49,5 @@ double Brake::forceByLever( int leverPos, int curTime, int wagonNo )
 
     prevLeverPos = leverPos;
 
-    return forceByBrakePressure(curPressure);
+    return forceByBrakeVelocity(curPressure);
 }
