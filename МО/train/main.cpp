@@ -6,10 +6,10 @@ using namespace std;
 
 int main( void )
 {
-    OptControlProblem p("dat/brake.dat",
-                        "dat/train.dat",
-                        "dat/weather.dat",
-                        "dat/stretch.dat",
+    OptControlProblem p("../train/dat/brake.dat",
+                        "../train/dat/train.dat",
+                        "../train/dat/weather.dat",
+                        "../train/dat/stretch.dat",
                         50);
     cout << "Hello World!" << endl;
     return 0;
