@@ -4,7 +4,7 @@
 
 using namespace std;
 
-int main()
+int main( void )
 {
     OptControlProblem p("dat/brake.dat",
                         "dat/train.dat",
