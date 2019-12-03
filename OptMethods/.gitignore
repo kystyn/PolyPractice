@@ -2,6 +2,8 @@
 *.log
 *.toc
 
+*.bbl
+*.blg
 *.bcf
 *.run*
 *.synctex*
