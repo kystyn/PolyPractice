@@ -12,6 +12,8 @@ int main( void )
                         "../train/dat/stretch.dat",
                         50);
 
+    p.solve("../train/results/result.txt");
+
     cout << "Hello World!" << endl;
     return 0;
 }

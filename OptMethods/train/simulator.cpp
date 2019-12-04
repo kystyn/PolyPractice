@@ -59,7 +59,8 @@ double Simulator::evaluateDistance( double prevDistance, double velocity, int ti
 bool Simulator::simulateSector(
         double incomingVelocity,
         int sectorNo,
-        const Solution &sectorSolution )
+        const Solution &sectorSolution,
+        double &outcomingVelocity )
 {
     static const double TOLLERANCE_PRESSURE = 0.3;
     static const double TOLLERANCE_VELOCITY = 5;
@@ -91,6 +92,8 @@ bool Simulator::simulateSector(
         if (sectorSolution.traction[size_t(stepNo)] < theTrain.staticInfo().tractionForceMax)
             return false;
     }
+
+    outcomingVelocity = velocity;
 
     if (std::abs(deltaPressure) > TOLLERANCE_PRESSURE)
         return false;

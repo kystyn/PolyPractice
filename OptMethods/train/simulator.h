@@ -20,7 +20,8 @@ public:
     bool simulateSector(
             double incomingVelocity,
             int sectorNo,
-            Solution const &sectorSolution );
+            Solution const &sectorSolution,
+            double &outcomingVelocity );
 
     Train const & train() const;
     Stretch const & stretch() const;

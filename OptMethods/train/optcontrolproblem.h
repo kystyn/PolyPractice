@@ -10,16 +10,15 @@ class OptControlProblem
 public:
     OptControlProblem() = default;
 
-    OptControlProblem( std::string const & brakeFName,
-                       std::string const & trainFName,
-                       std::string const & weatherFName,
-                       std::string const & stretchFName,
+    OptControlProblem( std::string const &brakeFName,
+                       std::string const &trainFName,
+                       std::string const &weatherFName,
+                       std::string const &stretchFName,
                        int humidity );
 
-    void solve();//bin search
+    void solve( std::string const &outFName );//bin search
 private:
     Simulator simulator;
-    std::shared_ptr<AbstractSolutionGenerator> generator;
 };
 
 #endif // OPTCONTROLPROBLEM_H

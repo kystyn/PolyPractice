@@ -106,7 +106,8 @@ void DifferentialEvolution::select()
     while (populationSize > population.size() * 3 / 2 && curSteps++ < selectionSteps)
     {
         size_t i = size_t(rand()) % population.size() - 1;
-        while (simulator.simulateSector(incomingVelocity, sectorNo, population[(++i % population.size())]))
+        double vel;
+        while (simulator.simulateSector(incomingVelocity, sectorNo, population[(++i % population.size())], vel))
             ;
         population.erase(population.begin() + int(i));
     }
