@@ -34,7 +34,7 @@ void OptControlProblem::evaluateForces( double distance )
         auto curMass = wagonMass[size_t(i)];
         auto curAngle = stretch.sector(distance - trainInfo.wagonLength * i).angle;
         auto
-                tractionForce = curState.tractionPercent * trainInfo.tractionForceMax, //kN
+                tractionForce = curState.tractionPercent * trainInfo.tractionForceMax / 100.0, //kN
                 frictionForce = - mu * curMass * cos(curAngle), // kN = tonn * m/s^2
                 brakeForce = brake.forceByLever(curState.brakeLever, curState.time, i),
                 gravityForce = - curMass * gravityConst * sin(curAngle);

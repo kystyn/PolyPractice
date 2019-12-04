@@ -17,6 +17,7 @@ public:
                          int wagonNo );
 
     static const int NEUTRAL_LEVER = 2;
+    static const int STAFF_LEVE = 5;
     static const double NEUTRAL_PRESSURE;
 private:
     int prevLeverPos;

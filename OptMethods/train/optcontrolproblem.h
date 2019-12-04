@@ -30,13 +30,6 @@ private:
     double evaluateDistance( double prevDistance, double velocity, int timeElapsed ) const;
     bool checkForces( void ) const;
 
-    struct DynamicState
-    {
-        std::vector<double>
-            &force;
-        double velocity;
-    };
-
     struct ControlState
     {
         // time in secs

@@ -15,7 +15,7 @@ protected:
     virtual int childrenCount( void ) const = 0;
     // crossingover creates two new children
     virtual std::pair<Solution, Solution> crossingover( std::pair<Solution, Solution> const &sols ) = 0;
-    virtual bool needMutate( Solution const &sol ) const = 0;
+    virtual bool needMutate( Solution const &sol ) = 0;
     // solution mutates in itself
     virtual void mutate( Solution &sol ) const = 0;
     virtual void select( void ) = 0;
