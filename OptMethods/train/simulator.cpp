@@ -14,7 +14,7 @@ Simulator::Simulator( const std::string &brakeFName,
                       const std::string &weatherFName,
                       const std::string &stretchFName,
                       int humidity ) :
-    brake(brakeFName),
+    theBrake(brakeFName),
     theTrain(trainFName),
     theStretch(stretchFName),
     weather(weatherFName),
@@ -37,7 +37,7 @@ void Simulator::evaluateForces( double distance )
         auto
                 tractionForce = curState.tractionPercent * trainInfo.tractionForceMax / 100.0, //kN
                 frictionForce = - mu * curMass * cos(curAngle), // kN = tonn * m/s^2
-                brakeForce = brake.forceByLever(curState.brakeLever, curState.time, i),
+                brakeForce = theBrake.forceByLever(curState.brakeLever, curState.time, i),
                 gravityForce = - curMass * gravityConst * sin(curAngle);
 
 
@@ -80,7 +80,7 @@ bool Simulator::simulateSector(
         distance = evaluateDistance(distance, velocity, step);
 
         // brake
-        auto brakeVel = brake.brakeVelocityByLever(sectorSolution.brake[size_t(stepNo)]);
+        auto brakeVel = theBrake.brakeVelocityByLever(sectorSolution.brake[size_t(stepNo)]);
         deltaPressure += brakeVel * step;
 
         if (!checkForces())
@@ -117,6 +117,11 @@ const Train &Simulator::train() const
 const Stretch &Simulator::stretch() const
 {
     return theStretch;
+}
+
+const Brake &Simulator::brake() const
+{
+    return theBrake;
 }
 
 bool Simulator::checkForces() const

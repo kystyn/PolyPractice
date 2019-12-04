@@ -34,7 +34,7 @@ public:
             if (!ifs)
                 break;
             ifs >> val;
-            table[key] = val;
+            theTable[key] = val;
             i++;
         }
     }
@@ -55,10 +55,10 @@ public:
     {
         std::pair<KeyT, ValT> prev, next = {0, 0};
 
-        if (key < table.begin()->first)
-            return table.begin()->second;
+        if (key < theTable.begin()->first)
+            return theTable.begin()->second;
 
-        for (auto t : table)
+        for (auto t : theTable)
         {
             if (t.first < key)
                 prev = t;
@@ -77,13 +77,13 @@ public:
         return (1 - l) * prev.second + l * next.second;
     }
 
-    std::map<KeyT, ValT> const & getTable( void ) const
+    std::map<KeyT, ValT> const & table( void ) const
     {
-        return table;
+        return theTable;
     }
 
 private:
-    std::map<KeyT, ValT> table;
+    std::map<KeyT, ValT> theTable;
 };
 
 #endif /* __MAP_TABLE_H_ */

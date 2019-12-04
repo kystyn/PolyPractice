@@ -31,7 +31,7 @@ void Stretch::init( const std::string &fileName )
     }
 
     Sector s;
-    while (!ifs)
+    while (ifs)
     {
         ifs >> s;
         if (std::abs(s.maxVelocity) < 1e-6)

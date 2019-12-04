@@ -25,21 +25,26 @@ void DifferentialEvolution::generatePopulation()
     for (size_t i = 0; i < populationSize; i++)
     {
         Solution sol;
-        double velocity = (minVelocity + (sector.maxVelocity - sector.maxVelocity) * i / populationSize) / 3.6;
+        // m / s
+        double velocity = (minVelocity + (sector.maxVelocity - minVelocity) * i / populationSize) / 3.6;
         int time = int(std::ceil(sector.length / velocity));
         int stepsCount = time / step + 1;
         sol.setTimeUniformDistribution(step, stepsCount);
 
         sol.traction.resize(size_t(stepsCount));
         sol.brake.resize(size_t(stepsCount));
-        if (i < populationSize / 2)
-            for (size_t s = 0; s < size_t(stepsCount); s++)
+
+        sol.stepsCount = stepsCount;
+        sol.step = step;
+
+        for (size_t s = 0; s < size_t(stepsCount); s++)
+            if (rand() % 2)
             {
-                sol.brake[s] = 1 + rand() % 6;
+                // -1 cause last position is emergency
+                sol.brake[s] = 1 + rand() % (simulator.brake().leverPositions() - 1);
                 sol.traction[s] = 0;
             }
-        else
-            for (size_t s = 0; s < size_t(stepsCount); s++)
+            else
             {
                 sol.brake[s] = 0;
                 sol.traction[s] = 1 + rand() % 100;
@@ -69,13 +74,17 @@ std::pair<Solution, Solution> DifferentialEvolution::crossingover( const std::pa
 
     auto newSol = sols;
 
-    for (size_t i = 0; i < lessSize / 3; i++)
+    size_t
+            s1 = size_t(rand()) % lessSize,
+            s2 = size_t(rand()) % lessSize;
+
+    for (size_t i = 0; i < std::min(s1, s2)/*lessSize / 3*/; i++)
     {
         std::swap(newSol.first.brake[i], newSol.second.brake[i]);
         std::swap(newSol.first.traction[i], newSol.second.traction[i]);
     }
 
-    for (size_t i = lessSize * 2 / 3; i < lessSize; i++)
+    for (size_t i = std::max(s1, s2)/*2 * lessSize / 3*/; i < lessSize; i++)
     {
         std::swap(newSol.first.brake[i], newSol.second.brake[i]);
         std::swap(newSol.first.traction[i], newSol.second.traction[i]);
@@ -119,8 +128,9 @@ void DifferentialEvolution::select()
 
 bool DifferentialEvolution::findOptimal( Solution &optSolution ) const
 {
+    double vel;
     for (auto sol : population)
-        if (simulator.simulateSector(incomingVelocity, sectorNo, sol))
+        if (simulator.simulateSector(incomingVelocity, sectorNo, sol, vel))
         {
             optSolution = sol;
             return true;

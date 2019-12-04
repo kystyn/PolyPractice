@@ -18,8 +18,10 @@ public:
 
     Solution & operator=( Solution const &s )
     {
+        step = s.step;
+        stepsCount = s.stepsCount;
         traction = std::move(s.traction);
-        brake = std::move(s.traction);
+        brake = std::move(s.brake);
 
         return *this;
     }

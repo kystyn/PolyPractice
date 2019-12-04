@@ -10,6 +10,7 @@ OptControlProblem::OptControlProblem(
         int humidity ) :
     simulator(brakeFName, trainFName, weatherFName, stretchFName, humidity)
 {
+    srand(uint(time(nullptr)));
 }
 
 void OptControlProblem::solve( std::string const &outFName )
@@ -24,7 +25,8 @@ void OptControlProblem::solve( std::string const &outFName )
     if (!ofs)
         std::cerr << "Bad output file " + outFName << std::endl;
 
-    for (size_t i = 0; i < profile.size(); i++)
+    // last profile element is always fake
+    for (size_t i = 0; i < profile.size() - 1; i++)
     {
         int
                 left_T0 = 0,
