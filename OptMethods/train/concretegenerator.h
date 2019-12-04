@@ -7,10 +7,10 @@
 class Train;
 class OptControlProblem;
 
-class DifferentialEvolution : public AbstractSolutionGenerator
+class ConcreteSolutionGenerator : public AbstractSolutionGenerator
 {
 public:
-    DifferentialEvolution( Simulator &simulator,
+    ConcreteSolutionGenerator( Simulator &simulator,
                            double incomingVelocity,
                            int sectorNo,
                            int passTime );

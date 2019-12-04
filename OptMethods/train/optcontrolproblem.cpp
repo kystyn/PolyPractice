@@ -1,6 +1,6 @@
 #include <cmath>
 #include "optcontrolproblem.h"
-#include "differentialevolution.h"
+#include "concretegenerator.h"
 
 OptControlProblem::OptControlProblem(
         const std::string &brakeFName,
@@ -40,7 +40,7 @@ void OptControlProblem::solve( std::string const &outFName )
         while (right_T0 - left_T0 > 60)
         {
             T0 = (left_T0 + right_T0) / 2;
-            generator = std::make_shared<DifferentialEvolution>(simulator, outcomingVelocity, i, T0);
+            generator = std::make_shared<ConcreteSolutionGenerator>(simulator, outcomingVelocity, i, T0);
 
             bool res = generator->solve(optSectoralSol);
             if (res)

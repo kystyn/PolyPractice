@@ -1,10 +1,10 @@
 #include <algorithm>
 #include <cmath>
-#include "differentialevolution.h"
+#include "concretegenerator.h"
 #include "simulator.h"
 
 
-DifferentialEvolution::DifferentialEvolution(
+ConcreteSolutionGenerator::ConcreteSolutionGenerator(
         Simulator &simulator, double incomingVelocity,
         int sectorNo, int passTime ) :
     iterationsCount(0),
@@ -18,7 +18,7 @@ DifferentialEvolution::DifferentialEvolution(
 {
 }
 
-void DifferentialEvolution::generatePopulation()
+void ConcreteSolutionGenerator::generatePopulation()
 {
     population.resize(populationSize);
 
@@ -52,7 +52,7 @@ void DifferentialEvolution::generatePopulation()
     }
 }
 
-std::pair<Solution, Solution> DifferentialEvolution::parents()
+std::pair<Solution, Solution> ConcreteSolutionGenerator::parents()
 {
     size_t
             n1 = size_t(rand()) % population.size(),
@@ -61,12 +61,12 @@ std::pair<Solution, Solution> DifferentialEvolution::parents()
     return std::make_pair(population[n1], population[n2]);
 }
 
-int DifferentialEvolution::childrenCount()
+int ConcreteSolutionGenerator::childrenCount()
 {
     return int(population.size());
 }
 
-std::pair<Solution, Solution> DifferentialEvolution::crossingover( const std::pair<Solution, Solution> &sols )
+std::pair<Solution, Solution> ConcreteSolutionGenerator::crossingover( const std::pair<Solution, Solution> &sols )
 {
     auto lessSize = std::min(sols.first.traction.size(), sols.second.traction.size());
 
@@ -91,21 +91,21 @@ std::pair<Solution, Solution> DifferentialEvolution::crossingover( const std::pa
     return newSol;
 }
 
-bool DifferentialEvolution::needMutate( const Solution & )
+bool ConcreteSolutionGenerator::needMutate( const Solution & )
 {
     mutantShift = (mutantShift + 1) % mutateFrequency;
 
     return mutantShift != 0;
 }
 
-void DifferentialEvolution::mutate( Solution &sol )
+void ConcreteSolutionGenerator::mutate( Solution &sol )
 {
     const double F = 0.25;
 
     sol = sol + (population[rand() % populationSize] - population[rand() % populationSize]) * F;
 }
 
-void DifferentialEvolution::select()
+void ConcreteSolutionGenerator::select()
 {
     int selectionSteps = populationSize * 2;
     int curSteps = 0;
@@ -124,7 +124,7 @@ void DifferentialEvolution::select()
         population.erase(population.begin() + rand() % int(population.size()));
 }
 
-bool DifferentialEvolution::findOptimal( Solution &optSolution )
+bool ConcreteSolutionGenerator::findOptimal( Solution &optSolution )
 {
     double vel;
     for (auto sol : population)
@@ -137,7 +137,7 @@ bool DifferentialEvolution::findOptimal( Solution &optSolution )
     return false;
 }
 
-bool DifferentialEvolution::finished()
+bool ConcreteSolutionGenerator::finished()
 {
     Solution s;
     if (iterationsCount++ >= maxIterCount)

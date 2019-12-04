@@ -9,5 +9,5 @@ add_executable(train main.cpp train.cpp brake.cpp stretch.cpp
     optcontrolproblem.cpp
     solution.cpp
     abstractsolutiongenerator.cpp
-    differentialevolution.cpp
+    concretegenerator.cpp
     simulator.cpp)
