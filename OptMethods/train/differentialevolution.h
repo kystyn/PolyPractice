@@ -2,12 +2,18 @@
 #define DIFFERENTIALEVOLUTION_H
 
 #include "abstractsolutiongenerator.h"
-#include "stretch.h"
+#include "simulator.h"
+
+class Train;
+class OptControlProblem;
 
 class DifferentialEvolution : public AbstractSolutionGenerator
 {
 public:
-    DifferentialEvolution( Stretch::Sector const &sector );
+    DifferentialEvolution( Simulator &simulator,
+                           double incomingVelocity,
+                           int sectorNo,
+                           int passTime );
 
     void generatePopulation() override;
     std::pair<Solution, Solution> parents() override;
@@ -25,8 +31,14 @@ public:
     bool finished() const override;
 
 private:
+    int passTime;
+
+    Simulator &simulator;
+    Train const &train;
     int mutantShift;
-    Stretch::Sector sector;
+    double incomingVelocity;
+    int sectorNo;
+    Stretch::Sector sector;   
     static const int populationSize = 50;
     static const int step = 20;
     static const int mutateFrequency = populationSize / 10;

@@ -1,10 +1,19 @@
 #include <algorithm>
 #include <cmath>
 #include "differentialevolution.h"
+#include "simulator.h"
 
-DifferentialEvolution::DifferentialEvolution( const Stretch::Sector &sector ) :
+
+DifferentialEvolution::DifferentialEvolution(
+        Simulator &simulator, double incomingVelocity,
+        int sectorNo, int passTime ) :
+    passTime(passTime),
+    simulator(simulator),
+    train(simulator.train()),
     mutantShift(0),
-    sector(sector)
+    incomingVelocity(incomingVelocity),
+    sectorNo(sectorNo),
+    sector(simulator.stretch().profile()[size_t(sectorNo)])
 {
 }
 
@@ -75,7 +84,7 @@ std::pair<Solution, Solution> DifferentialEvolution::crossingover( const std::pa
     return newSol;
 }
 
-bool DifferentialEvolution::needMutate( const Solution &sol )
+bool DifferentialEvolution::needMutate( const Solution & )
 {
     mutantShift = (mutantShift + 1) % mutateFrequency;
 
@@ -84,5 +93,43 @@ bool DifferentialEvolution::needMutate( const Solution &sol )
 
 void DifferentialEvolution::mutate( Solution &sol ) const
 {
+    const double F = 0.25;
 
+    sol = sol + (population[rand() % populationSize] - population[rand() % populationSize]) * F;
+}
+
+void DifferentialEvolution::select()
+{
+    int selectionSteps = populationSize * 2;
+    int curSteps = 0;
+    // Clever select
+    while (populationSize > population.size() * 3 / 2 && curSteps++ < selectionSteps)
+    {
+        size_t i = size_t(rand()) % population.size() - 1;
+        while (simulator.simulateSector(incomingVelocity, sectorNo, population[(++i % population.size())]))
+            ;
+        population.erase(population.begin() + int(i));
+    }
+
+    // Random select
+    while (populationSize > population.size())
+        population.erase(population.begin() + rand() % int(population.size()));
+}
+
+bool DifferentialEvolution::findOptimal( Solution &optSolution ) const
+{
+    for (auto sol : population)
+        if (simulator.simulateSector(incomingVelocity, sectorNo, sol))
+        {
+            optSolution = sol;
+            return true;
+        }
+
+    return false;
+}
+
+bool DifferentialEvolution::finished() const
+{
+    Solution s;
+    return findOptimal(s);
 }

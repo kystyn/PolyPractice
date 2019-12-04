@@ -1,55 +1,25 @@
 #ifndef OPTCONTROLPROBLEM_H
 #define OPTCONTROLPROBLEM_H
 
-#include "brake.h"
-#include "stretch.h"
-#include "train.h"
-#include "weather.h"
-#include "solution.h"
+#include <memory>
+#include "simulator.h"
+#include "abstractsolutiongenerator.h"
 
 class OptControlProblem
 {
 public:
-    OptControlProblem();
+    OptControlProblem() = default;
 
     OptControlProblem( std::string const & brakeFName,
                        std::string const & trainFName,
                        std::string const & weatherFName,
                        std::string const & stretchFName,
-                       int humidity);
+                       int humidity );
 
-    bool simulateSector(
-            double incomingVelocity,
-            int sectorNo,
-            Solution const &sectorSolution );
-
+    void solve();//bin search
 private:
-    // distance from the stretch beginning
-    void evaluateForces( double distance );
-    double evaluateVelocity( double prevVelocity, int timeElapsed ) const;
-    double evaluateDistance( double prevDistance, double velocity, int timeElapsed ) const;
-    bool checkForces( void ) const;
-
-    struct ControlState
-    {
-        // time in secs
-        int
-            tractionPercent,
-            brakeLever,
-            time;
-    };
-
-    Brake brake;
-    Train train;
-    Stretch stretch;
-    Weather weather;
-    Solution stretchSolution;
-
-    double mu;
-
-    ControlState
-        curState,
-        prevState;
+    Simulator simulator;
+    std::shared_ptr<AbstractSolutionGenerator> generator;
 };
 
 #endif // OPTCONTROLPROBLEM_H

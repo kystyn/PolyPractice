@@ -6,11 +6,6 @@
 #include "solution.h"
 #include "brake.h"
 
-Solution::Solution( const Train &train ) : train(train)
-{
-
-}
-
 void Solution::setTimeUniformDistribution( int h, int N )
 {
     step = h;
@@ -25,7 +20,11 @@ void Solution::output( const std::string &fileName )
 
     if (!ofs)
         std::cerr << "Couldn't open file " + fileName + " for writing!\n";
+    output(ofs);
+}
 
+void Solution::output( std::ofstream &ofs )
+{
     for (size_t i = 0; i < brake.size(); i++)
         ofs << traction[i] << ' ' << brake[i] << "\n";
 }
@@ -39,7 +38,7 @@ Solution Solution::operator*( double F ) const
             newSol.brake[i]--;
 
         if (newSol.brake[i] <= Brake::NEUTRAL_LEVER)
-            newSol.traction[i] = std::min(std::max(0.0, newSol.traction[i] * F), train.staticInfo().tractionForceMax);
+            newSol.traction[i] = std::min(std::max(0, int(newSol.traction[i] * F)), 100);
     }
 
     return newSol;
