@@ -7,6 +7,7 @@
 DifferentialEvolution::DifferentialEvolution(
         Simulator &simulator, double incomingVelocity,
         int sectorNo, int passTime ) :
+    iterationsCount(0),
     passTime(passTime),
     simulator(simulator),
     train(simulator.train()),
@@ -19,16 +20,13 @@ DifferentialEvolution::DifferentialEvolution(
 
 void DifferentialEvolution::generatePopulation()
 {
-    double minVelocity = sector.maxVelocity / 10;
     population.resize(populationSize);
 
     for (size_t i = 0; i < populationSize; i++)
     {
         Solution sol;
         // m / s
-        double velocity = (minVelocity + (sector.maxVelocity - minVelocity) * i / populationSize) / 3.6;
-        int time = int(std::ceil(sector.length / velocity));
-        int stepsCount = time / step + 1;
+        int stepsCount = passTime / step + 1;
         sol.setTimeUniformDistribution(step, stepsCount);
 
         sol.traction.resize(size_t(stepsCount));
@@ -63,7 +61,7 @@ std::pair<Solution, Solution> DifferentialEvolution::parents()
     return std::make_pair(population[n1], population[n2]);
 }
 
-int DifferentialEvolution::childrenCount() const
+int DifferentialEvolution::childrenCount()
 {
     return int(population.size());
 }
@@ -100,7 +98,7 @@ bool DifferentialEvolution::needMutate( const Solution & )
     return mutantShift != 0;
 }
 
-void DifferentialEvolution::mutate( Solution &sol ) const
+void DifferentialEvolution::mutate( Solution &sol )
 {
     const double F = 0.25;
 
@@ -126,7 +124,7 @@ void DifferentialEvolution::select()
         population.erase(population.begin() + rand() % int(population.size()));
 }
 
-bool DifferentialEvolution::findOptimal( Solution &optSolution ) const
+bool DifferentialEvolution::findOptimal( Solution &optSolution )
 {
     double vel;
     for (auto sol : population)
@@ -139,8 +137,10 @@ bool DifferentialEvolution::findOptimal( Solution &optSolution ) const
     return false;
 }
 
-bool DifferentialEvolution::finished() const
+bool DifferentialEvolution::finished()
 {
     Solution s;
+    if (iterationsCount++ >= maxIterCount)
+        return false;
     return findOptimal(s);
 }

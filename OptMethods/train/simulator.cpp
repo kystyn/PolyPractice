@@ -98,7 +98,9 @@ bool Simulator::simulateSector(
     if (std::abs(deltaPressure) > TOLLERANCE_PRESSURE)
         return false;
 
-    if (std::abs(velocity - theStretch.profile()[size_t(sectorNo + 1)].maxVelocity) >
+    //velocity - m/s
+    // stretch::maxVelocity - km/h
+    if (std::abs(velocity - theStretch.profile()[size_t(sectorNo + 1)].maxVelocity / 3.6) >
             TOLLERANCE_VELOCITY)
         return false;
 

@@ -46,6 +46,9 @@ void Train::init( const std::string &fileName )
     theWagonMass.clear();
     theWagonMass.resize(size_t(end->first));
 
+    theWagonForce.clear();
+    theWagonForce.resize(size_t(end->first));
+
     int curWagon = 0;
     for (auto i = table.begin(); i != end;)
     {
