@@ -28,7 +28,7 @@ public:
         ValT val;
         int i = 0;
 
-        while (count != 0 ? i < count : !ifs)
+        while ((count != 0) ? (i < count) : ((bool)ifs))
         {
             ifs >> key;
             if (!ifs)
@@ -53,10 +53,28 @@ public:
 
     ValT get( KeyT key ) const
     {
-        auto it = table.find(key);
-        if (it != table.end())
-            return table.at(key);
-        return ValT();
+        std::pair<KeyT, ValT> prev, next = {0, 0};
+
+        if (key < table.begin()->first)
+            return table.begin()->second;
+
+        for (auto t : table)
+        {
+            if (t.first < key)
+                prev = t;
+            else
+            {
+                next = t;
+                break;
+            }
+        }
+
+        if (std::abs(next.first) < 1e-6)
+            return prev.second;
+
+        auto l = (key - prev.first) / (next.first - prev.first);
+
+        return (1 - l) * prev.second + l * next.second;
     }
 
     std::map<KeyT, ValT> const & getTable( void ) const

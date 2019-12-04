@@ -11,14 +11,9 @@ Train::Train( const std::string &fileName )
     init(fileName);
 }
 
-void Train::setActualForce( int wagonNo, double force )
+void Train::setForce( int wagonNo, double force )
 {
-    wagonForce[size_t(wagonNo)] = force;
-}
-
-double Train::getActualForce( int wagonNo ) const
-{
-    return wagonForce.at(size_t(wagonNo));
+    theWagonForce[size_t(wagonNo)] = force;
 }
 
 void Train::init( const std::string &fileName )
@@ -32,11 +27,10 @@ void Train::init( const std::string &fileName )
     }
 
     // TRAIN:
-    // couplerForceMax
-    // tractionForceMax
-    // brakeWavePeriod
-    // wagonLength
-    // wagonsMassTable
+    // couplerForceMax, kN
+    // tractionForceMax, kN
+    // wagonLength, m
+    // wagonsMassTable, tonn
 
     ifs >> theStaticInfo;
 
@@ -44,13 +38,13 @@ void Train::init( const std::string &fileName )
     MapTable<int, int> massDistr(ifs);
 
     std::map<int, int> table = massDistr.getTable();
-    theStaticInfo.wagonCount = int(table.size());
 
-    table[theStaticInfo.wagonCount + 1] = 0;
+    theStaticInfo.wagonCount = (--table.end())->first;
 
     auto end = --table.end();
 
-    wagonMass.clear();
+    theWagonMass.clear();
+    theWagonMass.resize(size_t(end->first));
 
     int curWagon = 0;
     for (auto i = table.begin(); i != end;)
@@ -59,11 +53,37 @@ void Train::init( const std::string &fileName )
                 cur = i,
                 next = ++i;
         for (int j = 0; j < next->first - cur->first; j++)
-            wagonMass[size_t(curWagon++)] = cur->second;
+            theWagonMass[size_t(curWagon++)] = cur->second;
     }
+    theWagonMass.back() = theWagonMass[theWagonMass.size() - 2];
 }
 
 const Train::StaticInfo & Train::staticInfo() const
 {
     return theStaticInfo;
+}
+
+const std::vector<int> & Train::wagonMass() const
+{
+    return theWagonMass;
+}
+
+const std::vector<double> & Train::wagonForce() const
+{
+    return theWagonForce;
+}
+
+int Train::wagonMass( int wagonNo ) const
+{
+    return theWagonMass[size_t(wagonNo)];
+}
+
+double Train::wagonForce( int wagonNo ) const
+{
+    return theWagonForce[size_t(wagonNo)];
+}
+
+int Train::trainLength() const
+{
+    return staticInfo().wagonCount * staticInfo().wagonLength;
 }
