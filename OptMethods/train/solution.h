@@ -12,10 +12,6 @@ public:
     void output( std::string const &fileName );
     void output( std::ofstream &ofs );
 
-    Solution operator*( double F ) const;
-    Solution operator+( Solution const &sol ) const;
-    Solution operator-( Solution const &sol ) const;
-
     Solution & operator=( Solution const &s );
 
     int step, stepsCount;

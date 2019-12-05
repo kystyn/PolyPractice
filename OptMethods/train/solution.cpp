@@ -29,47 +29,6 @@ void Solution::output( std::ofstream &ofs )
         ofs << traction[i] << ' ' << brake[i] << "\n";
 }
 
-Solution Solution::operator*( double F ) const
-{
-    Solution newSol = *this;
-    for (size_t i = 0; i < brake.size(); i++)
-    {
-        if (newSol.brake[i] > Brake::NEUTRAL_LEVER)
-            newSol.brake[i] = int(newSol.brake[i] * F) + 1;
-
-        if (newSol.brake[i] <= Brake::NEUTRAL_LEVER)
-            newSol.traction[i] = std::min(std::max(0, int(newSol.traction[i] * F)), 100);
-    }
-
-    return newSol;
-}
-
-Solution Solution::operator+( const Solution &sol ) const
-{
-    Solution newSol = *this;
-
-    for (size_t i = 0; i < brake.size(); i++)
-    {
-        newSol.brake[i] = sol.brake[i] + brake[i];
-        newSol.traction[i] = sol.traction[i] + traction[i];
-    }
-
-    return newSol;
-}
-
-Solution Solution::operator-( const Solution &sol ) const
-{
-    Solution newSol = *this;
-
-    for (size_t i = 0; i < brake.size(); i++)
-    {
-        newSol.brake[i] = sol.brake[i] - brake[i];
-        newSol.traction[i] = sol.traction[i] - traction[i];
-    }
-
-    return newSol;
-}
-
 Solution & Solution::operator=( const Solution &s )
 {
     step = s.step;
