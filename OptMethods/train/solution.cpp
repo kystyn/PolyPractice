@@ -69,3 +69,19 @@ Solution Solution::operator-( const Solution &sol ) const
 
     return newSol;
 }
+
+Solution & Solution::operator=( const Solution &s )
+{
+    step = s.step;
+    stepsCount = s.stepsCount;
+    traction = s.traction;
+    brake = s.brake;
+
+    for (auto &x : traction)
+        x = std::max(0, std::min(x, 100));
+
+    for (auto &x : brake)
+        x = std::max(1, std::min(x, 5));
+
+    return *this;
+}
