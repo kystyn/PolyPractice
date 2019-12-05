@@ -51,3 +51,8 @@ double Brake::forceByLever( int leverPos, int curTime, int wagonNo )
 
     return forceByBrakeVelocity(curPressure);
 }
+
+int Brake::leverPositions() const
+{
+    return theBrakeVelocityByLever.table().size();
+}

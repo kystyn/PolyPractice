@@ -12,10 +12,10 @@ class Simulator
 public:
     Simulator();
     Simulator( const std::string &brakeFName,
-              const std::string &trainFName,
-              const std::string &weatherFName,
-              const std::string &stretchFName,
-              int humidity );
+               const std::string &trainFName,
+               const std::string &weatherFName,
+               const std::string &stretchFName,
+               int humidity );
 
     bool simulateSector(
             double incomingVelocity,
@@ -25,6 +25,7 @@ public:
 
     Train const & train() const;
     Stretch const & stretch() const;
+    Brake const & brake() const;
 
 private:
     // distance from the stretch beginning
@@ -33,7 +34,7 @@ private:
     double evaluateDistance( double prevDistance, double velocity, int timeElapsed ) const;
     bool checkForces( void ) const;
 
-    Brake brake;
+    Brake theBrake;
     Train theTrain;
     Stretch theStretch;
     Weather weather;
