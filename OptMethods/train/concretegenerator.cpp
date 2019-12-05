@@ -35,18 +35,24 @@ void ConcreteSolutionGenerator::generatePopulation()
         sol.stepsCount = stepsCount;
         sol.step = step;
 
-        for (size_t s = 0; s < size_t(stepsCount); s++)
+        for (size_t s = 0; s < size_t(stepsCount);)
             if (rand() % 2)
-            {
                 // -1 cause last position is emergency
-                sol.brake[s] = 1 + rand() % (simulator.brake().leverPositions() - 1);
-                sol.traction[s] = 0;
-            }
+                for (int j = 0; j <
+                     std::max(int(simulator.brake().brakeWavePeriod() * simulator.train().staticInfo().wagonCount) / step, stepsCount / 30);
+                     j++)
+                {
+                    sol.brake[s] = 1 + rand() % (simulator.brake().leverPositions() - 1);
+                    sol.traction[s++] = 0;
+                }
             else
-            {
-                sol.brake[s] = 0;
-                sol.traction[s] = 1 + rand() % 100;
-            }
+                for (int j = 0; j <
+                     std::max(int(simulator.brake().brakeWavePeriod() * simulator.train().staticInfo().wagonCount) / step, stepsCount / 30);
+                     j++)
+                {
+                    sol.brake[s] = 0;
+                    sol.traction[s++] = 1 + rand() % 100;
+                }
 
         population[i] = sol;
     }
@@ -100,9 +106,22 @@ bool ConcreteSolutionGenerator::needMutate( const Solution & )
 
 void ConcreteSolutionGenerator::mutate( Solution &sol )
 {
-    const double F = 0.25;
+    int position = rand() % int(sol.traction.size());
+    bool isTraction = (sol.traction[size_t(position)] != 0);
+    auto startPos = position;
+    for (; startPos >= 0; startPos--)
+        if ((isTraction && sol.traction[size_t(startPos)] == 0) ||
+            (!isTraction && sol.traction[size_t(startPos)] != 0))
+        {
+            startPos++;
+            break;
+        }
 
-    sol = sol + (population[rand() % populationSize] - population[rand() % populationSize]) * F;
+    for (; (sol.traction[size_t(startPos)] != 0) == isTraction; startPos++)
+    {
+        sol.brake[size_t(startPos)] = isTraction * (1 + rand() % (simulator.brake().leverPositions() - 1));
+        sol.traction[size_t(startPos)] = !isTraction * (1 + rand() % 100);
+    }
 }
 
 void ConcreteSolutionGenerator::select()
