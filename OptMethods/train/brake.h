@@ -17,6 +17,7 @@ public:
                          int wagonNo );
 
     int leverPositions() const;
+    double brakeWavePeriod() const;
 
     static const int NEUTRAL_LEVER = 2;
     static const int STAFF_LEVE = 5;
@@ -27,7 +28,7 @@ private:
     double prevStablePressure;
 
     int brakeStartTime;
-    double brakeWavePeriod;
+    double theBrakeWavePeriod;
 
     MapTable<int, double>
         theBrakeVelocityByLever;

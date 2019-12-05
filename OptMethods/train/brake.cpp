@@ -11,7 +11,7 @@ Brake::Brake( const std::string &fileName ) :
         std::cerr << "Bad file name " << fileName << "\n";
         return;
     }
-    ifs >> brakeWavePeriod;
+    ifs >> theBrakeWavePeriod;
 
     int posCount;
     ifs >> posCount;
@@ -32,9 +32,9 @@ double Brake::forceByBrakeVelocity( double pressure ) const
 double Brake::forceByLever( int leverPos, int curTime, int wagonNo )
 {
     auto curPressure = prevStablePressure +
-            ((curTime - brakeStartTime - wagonNo * brakeWavePeriod) > 0) *
+            ((curTime - brakeStartTime - wagonNo * theBrakeWavePeriod) > 0) *
             brakeVelocityByLever(leverPos) *
-            (curTime - brakeStartTime - wagonNo * brakeWavePeriod);
+            (curTime - brakeStartTime - wagonNo * theBrakeWavePeriod);
 
     if (leverPos != NEUTRAL_LEVER && prevLeverPos == NEUTRAL_LEVER)
     {
@@ -55,4 +55,9 @@ double Brake::forceByLever( int leverPos, int curTime, int wagonNo )
 int Brake::leverPositions() const
 {
     return theBrakeVelocityByLever.table().size();
+}
+
+double Brake::brakeWavePeriod() const
+{
+    return theBrakeWavePeriod;
 }
