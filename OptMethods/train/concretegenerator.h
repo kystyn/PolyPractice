@@ -40,7 +40,7 @@ private:
     double incomingVelocity;
     int sectorNo;
     Stretch::Sector sector;   
-    static const int populationSize = 2000;
+    static const int populationSize = 100;
     static const int step = 20;
     static const int mutateFrequency = populationSize / 10;
     static const int maxIterCount = 100000;

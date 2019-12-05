@@ -30,7 +30,7 @@ void OptControlProblem::solve( std::string const &outFName )
     {
         int
                 left_T0 = 0,
-                right_T0 = 86400,
+                right_T0 = 3000,
                 T0 = right_T0,
                 prevSuccessT0 = T0;
         Solution

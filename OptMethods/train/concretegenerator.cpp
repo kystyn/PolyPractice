@@ -24,37 +24,36 @@ void ConcreteSolutionGenerator::generatePopulation()
 
     for (size_t i = 0; i < populationSize; i++)
     {
-        Solution sol;
         // m / s
         int stepsCount = passTime / step + 1;
-        sol.setTimeUniformDistribution(step, stepsCount);
+        population[i].setTimeUniformDistribution(step, stepsCount);
 
-        sol.traction.resize(size_t(stepsCount));
-        sol.brake.resize(size_t(stepsCount));
+        population[i].traction.resize(size_t(stepsCount));
+        population[i].brake.resize(size_t(stepsCount));
 
-        sol.stepsCount = stepsCount;
-        sol.step = step;
+        population[i].stepsCount = stepsCount;
+        population[i].step = step;
 
         for (size_t s = 0; s < size_t(stepsCount);)
             if (rand() % 2)
                 // -1 cause last position is emergency
-                for (int j = 0; j <
-                     std::max(int(simulator.brake().brakeWavePeriod() * simulator.train().staticInfo().wagonCount) / step, stepsCount / 30);
+                for (int j = 0;
+                     s < size_t(stepsCount) &&
+                     j < std::max(int(simulator.brake().brakeWavePeriod() * simulator.train().staticInfo().wagonCount) / step, stepsCount / 30);
                      j++)
                 {
-                    sol.brake[s] = 1 + rand() % (simulator.brake().leverPositions() - 1);
-                    sol.traction[s++] = 0;
+                    population[i].brake[s] = 1 + rand() % (simulator.brake().leverPositions() - 1);
+                    population[i].traction[s++] = 0;
                 }
             else
-                for (int j = 0; j <
-                     std::max(int(simulator.brake().brakeWavePeriod() * simulator.train().staticInfo().wagonCount) / step, stepsCount / 30);
+                for (int j = 0;
+                     s < size_t(stepsCount) &&
+                     j < std::max(int(simulator.brake().brakeWavePeriod() * simulator.train().staticInfo().wagonCount) / step, stepsCount / 30);
                      j++)
                 {
-                    sol.brake[s] = 0;
-                    sol.traction[s++] = 1 + rand() % 100;
+                    population[i].brake[s] = 0;
+                    population[i].traction[s++] = 1 + rand() % 100;
                 }
-
-        population[i] = sol;
     }
 }
 
@@ -101,7 +100,7 @@ bool ConcreteSolutionGenerator::needMutate( const Solution & )
 {
     mutantShift = (mutantShift + 1) % mutateFrequency;
 
-    return mutantShift != 0;
+    return mutantShift == 0;
 }
 
 void ConcreteSolutionGenerator::mutate( Solution &sol )
@@ -117,7 +116,8 @@ void ConcreteSolutionGenerator::mutate( Solution &sol )
             break;
         }
 
-    for (; (sol.traction[size_t(startPos)] != 0) == isTraction; startPos++)
+    for (; (sol.traction[size_t(startPos)] != 0) == isTraction &&
+           startPos < sol.stepsCount; startPos++)
     {
         sol.brake[size_t(startPos)] = isTraction * (1 + rand() % (simulator.brake().leverPositions() - 1));
         sol.traction[size_t(startPos)] = !isTraction * (1 + rand() % 100);
@@ -133,9 +133,9 @@ void ConcreteSolutionGenerator::select()
     {
         size_t i = size_t(rand()) % population.size() - 1;
         double vel;
-        while (simulator.simulateSector(incomingVelocity, sectorNo, population[(++i % population.size())], vel))
+        while (simulator.simulateSector(incomingVelocity, sectorNo, population[(++i )], vel))
             ;
-        population.erase(population.begin() + int(i));
+        population.erase(population.begin() + int(i % population.size()));
     }
 
     // Random select
@@ -146,7 +146,7 @@ void ConcreteSolutionGenerator::select()
 bool ConcreteSolutionGenerator::findOptimal( Solution &optSolution )
 {
     double vel;
-    for (auto sol : population)
+    for (auto &sol : population)
         if (simulator.simulateSector(incomingVelocity, sectorNo, sol, vel))
         {
             optSolution = sol;

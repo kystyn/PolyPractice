@@ -19,7 +19,7 @@ bool AbstractSolutionGenerator::solve( Solution &optSolution )
     while (!finished())
     {
         breeding(chCount);
-        for (auto s : population)
+        for (auto &s : population)
             if (needMutate(s))
                 mutate(s);
         select();

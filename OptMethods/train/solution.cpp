@@ -29,6 +29,7 @@ void Solution::output( std::ofstream &ofs )
         ofs << traction[i] << ' ' << brake[i] << "\n";
 }
 
+
 Solution & Solution::operator=( const Solution &s )
 {
     step = s.step;
@@ -44,3 +45,4 @@ Solution & Solution::operator=( const Solution &s )
 
     return *this;
 }
+
